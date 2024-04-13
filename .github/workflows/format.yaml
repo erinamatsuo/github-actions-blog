@@ -25,7 +25,7 @@ jobs:
         run: |
           git fetch
           git branch
-          BRANCH_NAME=$(echo $GITHUB_REF | awk -F'/' '{print $3}')
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
           git checkout $BRANCH_NAME
       - name: format code
         run: yarn run format
