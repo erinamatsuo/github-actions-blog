@@ -15,7 +15,13 @@ jobs:
         uses: actions/checkout@v3
       - name: install packages
         run: yarn install
-      - name: Github setting
+      - name: Generate github token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.GITHUB_APP_ID }}
+          private_key: ${{ secrets.GITHUB_PRIVATE_KEY }}
+      - name: set infomation to github 
         run: |
           git remote set-url origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
           git config --global user.name "${GITHUB_ACTOR}"
