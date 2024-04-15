@@ -11,30 +11,30 @@ jobs:
     name: format, add, commit, push
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v3
-      - name: install packages
+      - name: Install packages
         run: yarn install
-      - name: set infomation to github 
+      - name: Set infomation to github 
         run: |
           git remote set-url origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
           git config --global user.name "${GITHUB_ACTOR}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: checkout pushed branch
+      - name: Checkout pushed branch
         run: |
           git fetch
           git branch
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
           git checkout $BRANCH_NAME
-      - name: format code
+      - name: Format code
         run: yarn run format
-      - name: check status
+      - name: Check status
         run: git status
-      - name: add changes
+      - name: Add changes
         run: git add .
-      - name: commit changes
+      - name: Commit changes
         run: git commit -m "Auto commit from GitHub Actions"
-      - name: push to github
+      - name: Push to github
         run: |
           git push origin $BRANCH_NAME
