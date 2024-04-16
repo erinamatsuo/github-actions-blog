@@ -10,9 +10,18 @@ jobs:
   format_throgh_push:
     name: format, add, commit, push
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          # Fine-grained PAT with contents:write and workflows:write
+          # scopes
+          token: ${{ secrets.WORKFLOW_TOKEN }} 
+          
       - name: Install packages
         run: yarn install
       - name: Set infomation to github 
