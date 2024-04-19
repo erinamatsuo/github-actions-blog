@@ -7,29 +7,24 @@ on:
       - "!main"
 
 jobs:
-  format_throgh_push:
+  format_through_push:
     name: format, add, commit, push
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          # Fine-grained PAT with contents:write and workflows:write
-          # scopes
-          token: ${{ secrets.WORKFLOW_TOKEN }} 
-          
       - name: Install packages
         run: yarn install
-      - name: Set infomation to github 
+      - name: Set information to github 
         run: |
-          git remote set-url origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+          git remote set-url origin https://${GITHUB_ACTOR}:${{ steps.generate_token.outputs.token }}@github.com/${GITHUB_REPOSITORY}
           git config --global user.name "${GITHUB_ACTOR}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Checkout pushed branch
         run: |
           git fetch
