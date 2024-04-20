@@ -11,32 +11,20 @@ jobs:
     name: format, add, commit, push
     runs-on: ubuntu-latest
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Generate token
-        uses: actions/github-script@v4
-        id: generate_token
-        with:
-          script: |
-             if (context.payload.installation) {
-              const token = github.actions.createToken({
-                 installation_id: context.payload.installation.id,
-                 permissions: ["write"]
-              });
-              console.log(token);
-              core.setOutput("token", token);
-             } else {
-               console.log("Installation ID not found in payload");
-             }
-          result-encoding: string
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Install packages
         run: yarn install
       - name: Set information to github 
         run: |
           git remote set-url origin https://${GITHUB_ACTOR}:${{ steps.generate_token.outputs.token }}@github.com/${GITHUB_REPOSITORY}
-          git config user.name "${GITHUB_ACTOR}"
+          git config --global user.name "${GITHUB_ACTOR}"
       - name: Checkout pushed branch
         run: |
           git fetch
@@ -53,4 +41,4 @@ jobs:
         run: git commit -m "Auto commit from GitHub Actions"
       - name: Push to github
         run: |
-          git push origin $GITHUB_REF
+          git push origin $BRANCH_NAME
