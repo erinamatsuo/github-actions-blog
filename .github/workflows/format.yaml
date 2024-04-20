@@ -32,6 +32,7 @@ jobs:
            https://api.github.com/app/installations/$APP_ID/access_tokens | jq -r .token)
           
           gh secret set MYSECRET --body "SECRET VALUE"
+          
       - name: Install packages
         run: yarn install
       - name: Set information to github 
