@@ -29,7 +29,7 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/app/installations/$APP_ID/access_tokens | jq -r .token)
   
-          gh secret set MYSECRET --body "SECRET VALUE" --env installation --token $INSTALLATION_TOKEN
+          gh secret set MYSECRET --body "SECRET VALUE"
       - name: Install packages
         run: yarn install
       - name: Set information to github 
