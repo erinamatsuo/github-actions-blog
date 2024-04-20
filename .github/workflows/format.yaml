@@ -23,6 +23,7 @@ jobs:
         env:
           APP_ID: ${{ secrets.APP_ID }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           INSTALLATION_TOKEN=$(curl -X POST \
            -H "Authorization: Bearer $PRIVATE_KEY" \
