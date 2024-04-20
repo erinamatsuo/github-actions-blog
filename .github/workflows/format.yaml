@@ -22,6 +22,7 @@ jobs:
       - name: Set secrets
         env:
           GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           gh secret set MYSECRET --body "SECRET VALUE"
       - name: Install packages
