@@ -21,10 +21,15 @@ jobs:
           private-key: ${{ secrets.PRIVATE_KEY }}
       - name: Set secrets
         env:
-          # GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
-          GH_TOKEN: ${{ github.token }}
+          APP_ID: ${{ secrets.APP_ID }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
         run: |
-          gh secret set MYSECRET --body "SECRET VALUE"
+          INSTALLATION_TOKEN=$(curl -X POST \
+           -H "Authorization: Bearer $PRIVATE_KEY" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/app/installations/$APP_ID/access_tokens | jq -r .token)
+  
+          gh secret set MYSECRET --body "SECRET VALUE" --token $INSTALLATION_TOKEN
       - name: Install packages
         run: yarn install
       - name: Set information to github 
