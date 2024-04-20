@@ -18,12 +18,16 @@ jobs:
         id: generate_token
         with:
           script: |
-            const token = github.actions.createToken({
-              installation_id: context.payload.installation.id,
-              permissions: ["write"]
-            });
-            console.log(token);
-            core.setOutput("token", token);
+             if (context.payload.installation) {
+              const token = github.actions.createToken({
+                 installation_id: context.payload.installation.id,
+                 permissions: ["write"]
+              });
+              console.log(token);
+              core.setOutput("token", token);
+             } else {
+               console.log("Installation ID not found in payload");
+             }
           result-encoding: string
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
