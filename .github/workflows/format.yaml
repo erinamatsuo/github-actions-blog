@@ -21,7 +21,7 @@ jobs:
           private-key: ${{ secrets.PRIVATE_KEY }}
       - name: Set secrets
         env:
-          GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+          # GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
           GH_TOKEN: ${{ github.token }}
         run: |
           gh secret set MYSECRET --body "SECRET VALUE"
